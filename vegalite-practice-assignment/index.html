@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Embedding Vega-Lite</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.19.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.15.1"></script>
+  </head>
+  <body>
+    <div id="vis" style="width: 100%"></div>
+    <div id="vis2"></div>
+    <div id="vis3"></div>
+
+    <script type="text/javascript">
+
+      let vis1Spec = {
+        $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+        description: 'A scatterplot for horsepower vs. price.',
+        data: {
+          url: "data/parse_data.json"
+        },
+        mark: 'circle',
+        encoding: {
+          y: {field: 'price', type: 'quantitative'},
+          x: {field: 'horsepower', type: 'quantitative'},
+        },
+      };
+      vegaEmbed('#vis', vis1Spec);
+
+      let vis2Spec = {
+        $schema: 'hattps://vega.github.io/schema/vega-lite/v5.json',
+        description: 'A simple bar chart .',
+        data: {
+          url: "./data/parse_data.json"
+        },
+        mark: 'bar',
+        encoding: {
+          x: {field: 'num-of-cylinders', type: 'ordinal', sort: ["two", "three", "four", "five", "six", "eight", "twelve"]},
+          y: {aggregate: "average",field: 'city-mpg', type: 'quantitative'},
+        },
+      };
+      vegaEmbed('#vis2', vis2Spec);
+
+      let vis3Spec = {
+        $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+        description: 'A simple bar chart with embedded data.',
+        data: {
+          url: "data/parse_data.json"
+        },
+        transform: [
+        {
+          aggregate: [{"op": "count", "as": "num_cars"}],
+          groupby: ["body-style", "make"]
+        }
+      ],
+      encoding: {
+        y: {"field": "body-style", "type": "ordinal"},
+        x: {"field": "make", "type": "ordinal"}
+      },
+      layer: [
+        {
+          mark: "rect",
+          encoding: {
+            color: {
+              field: "num_cars",
+              type: "quantitative",
+              title: "Count of Vehicles",
+              legend: {"direction": "horizontal", "gradientLength": 120}
+            }
+          }
+        },
+        {
+          mark: "text",
+          encoding: {
+            text: {"field": "num_cars", "type": "quantitative"},
+            color: {
+              condition: {"test": "datum['num_cars'] < 40", "value": "black"},
+              value: "white"
+            }
+          }
+        }
+      ],
+      config: {
+        axis: {"grid": true, "tickBand": "extent"}
+      }
+        
+      };
+      vegaEmbed('#vis3', vis3Spec);
+
+    </script>
+  </body>
+  
+</html>
