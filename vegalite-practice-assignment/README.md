@@ -2,7 +2,7 @@
 
 ## Quantitative vs. Quantitative
 
-![Alt Text](./visualization1.JPG)
+![Alt Text](./visualization1.png)
 
 ### Scatter Plot: (Price vs. Horsepower)
 
@@ -10,7 +10,7 @@
 
 ## Categorical vs. Quantitative
 
-![Alt Text](./visualization2.JPG)
+![Alt Text](./visualization2.png)
 
 ### Bar Chart: (Number of Cylinders vs. Average of City Miles per Gallon)
 
@@ -18,7 +18,7 @@
 
 ## Categorical vs. Categorical
 
-![Alt Text](./visualization3.JPG)
+![Alt Text](./visualization3.png)
 
 ### Labeled Heat Map: (Body Style vs. Manufacturer (make))
 
