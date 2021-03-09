@@ -10,7 +10,7 @@
 
 ## Categorical vs. Quantitative
 
-![Alt Text](./visualization2.png)
+![Alt Text](./visualization3.png)
 
 ### Bar Chart: (Number of Cylinders vs. Average of City Miles per Gallon)
 
@@ -18,7 +18,7 @@
 
 ## Categorical vs. Categorical
 
-![Alt Text](./visualization3.png)
+![Alt Text](./visualization2.png)
 
 ### Labeled Heat Map: (Body Style vs. Manufacturer (make))
 
