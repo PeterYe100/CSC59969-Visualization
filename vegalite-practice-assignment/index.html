@@ -7,8 +7,17 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.15.1"></script>
   </head>
   <body>
+    <h1>quantitative vs. quantitative</h1>
+    <div id='visqvq' style="width: 100vh"></div>
+    <h1>Problem 1</h1>
     <div id="vis" style="width: 100%"></div>
+    <h1>quantitative vs. categorical</h1>
+    <div id='visqvc' style="width: 70%"></div>
+    <h1>Problem 2</h1>
     <div id="vis2"></div>
+    <h1>quantitative vs. categorical</h1>
+    <div id='viscvc' style="width: 100%"></div>
+    <h1>Problem 3</h1>
     <div id="vis3"></div>
 
     <script type="text/javascript">
@@ -86,6 +95,164 @@
         
       };
       vegaEmbed('#vis3', vis3Spec);
+
+      let visSpecQvQ = {
+        $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+        description: 'A scatterplot for horsepower vs. price.',
+        repeat: {
+        row: ["curb-weight", "engine-size", "horsepower", "city-mpg", "highway-mpg", "price"],
+        column: ["price", "highway-mpg", "city-mpg", "horsepower", "engine-size", "curb-weight"]
+            },
+            spec: {
+              data: {"url": "./data/parse_data.json"},
+              width: 125,
+              height: 125,
+              autosize: {
+                type: "fit",
+                contains: "padding"
+              },
+              mark: "point",
+              params: [
+                {
+                  name: "brush",
+                  select: {
+                    type: "interval",
+                    resolve: "union",
+                    on: "[mousedown[event.shiftKey], window:mouseup] > window:mousemove!",
+                    translate: "[mousedown[event.shiftKey], window:mouseup] > window:mousemove!",
+                    zoom: "wheel![event.shiftKey]"
+                  }
+                },
+                {
+                  name: "grid",
+                  select: {
+                    type: "interval",
+                    resolve: "global",
+                    translate: "[mousedown[!event.shiftKey], window:mouseup] > window:mousemove!",
+                    zoom: "wheel![!event.shiftKey]"
+                  },
+                  bind: "scales"
+                }
+              ],
+              encoding: {
+                x: {field: {repeat: "column"}, type: "quantitative"},
+                y: {
+                  field: {"repeat": "row"},
+                  type: "quantitative",
+                  axis: {"minExtent": 30},
+                },
+                
+              }
+            }
+      };
+      vegaEmbed('#visqvq', visSpecQvQ);
+
+      let visSpecQvC = {
+        $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+        description: 'A scatterplot for horsepower vs. price.',
+        
+        repeat: {
+        row: ["curb-weight", "engine-size", "horsepower", "city-mpg", "highway-mpg", "price"],
+        column: ["make", "fuel-type", "body-style", "num-of-cylinders"]
+            },
+            spec: {
+              data: {
+              url: "./data/parse_data.json"
+              },
+              width: 200,
+              autosize: {
+                type: "fit",
+                contains: "padding"
+              },
+              mark: 'bar',
+              
+              params: [
+                {
+                  name: "brush",
+                  select: {
+                    type: "interval",
+                    resolve: "union",
+                    on: "[mousedown[event.shiftKey], window:mouseup] > window:mousemove!",
+                    translate: "[mousedown[event.shiftKey], window:mouseup] > window:mousemove!",
+                    zoom: "wheel![event.shiftKey]"
+                  }
+                },
+                {
+                  name: "grid",
+                  select: {
+                    type: "interval",
+                    resolve: "global",
+                    translate: "[mousedown[!event.shiftKey], window:mouseup] > window:mousemove!",
+                    zoom: "wheel![!event.shiftKey]"
+                  },
+                  bind: "scales"
+                }
+              ],
+              encoding: {
+                x: {field: {repeat: "column"}, type: "ordinal", sort: ["two", "three", "four", "five", "six", "eight", "twelve"]},
+                y: {
+                  field: {"repeat": "row"},
+                  type: "quantitative",
+                  axis: {"minExtent": 30},
+                  aggregate: "average"
+                },
+                
+              }
+            }
+      };
+      vegaEmbed('#visqvc', visSpecQvC);
+
+      let visSpecCvC = {
+        $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+        description: 'A scatterplot for horsepower vs. price.',
+        
+        repeat: {
+        row: ["num-of-cylinders", "make", "body-style", "fuel-type"],
+        column: ["fuel-type", "body-style", "make", "num-of-cylinders"]
+      },
+      transform: [
+        {
+          aggregate: [{"op": "count", "as": "num_cars"}],
+          groupby: ["make", "num-of-cylinders", "body-style", "fuel-type"]
+        }
+      ],
+      spec: {
+        data: {
+          url: "./data/parse_data.json"
+        },
+        mark: "rect",
+        width: 180,
+        height: 200,
+              autosize: {
+                type: "fit",
+                contains: "padding"
+              },
+        params: [
+          {name: "brush", select: {type: "interval", resolve: "union"}},
+          {
+            name: "grid",
+            select: {type: "interval", resolve: "global"},
+            bind: "scales"
+          }
+        ],
+        encoding: {
+          x: {field: {repeat: "column"}, type: "ordinal"},
+          y: {
+            field: {repeat: "row"},
+            type: "ordinal",
+            axis: {minExtent: 30}
+          },
+          color: {
+            field: "num_cars",
+            type: "quantitative",
+            title: "Count of Records",
+            legend: {"direction": "horizontal", "gradientLength": 120}
+          }
+        },
+        
+      }
+      };
+      vegaEmbed('#viscvc', visSpecCvC);
 
     </script>
   </body>
